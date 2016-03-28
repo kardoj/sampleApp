@@ -1,0 +1,14 @@
+{
+  "name": "app",
+  "version": "0.0.1",
+  "description": "Esimene app on parim app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kardo Jõeleht",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
