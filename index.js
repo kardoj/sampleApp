@@ -2,10 +2,12 @@ var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var config = require('./config');
+var mongoose = require('mongoose');
+
 
 var app = express();
+mongoose.connect(config.db);
 app.use(morgan('tiny'));
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
