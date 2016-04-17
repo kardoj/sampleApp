@@ -3,65 +3,101 @@ var router = express.Router();
 // Takes our schema template, which is in the database
 var Topic = require('../models/topic').Topic;
 
-// POST /api/topics/create
-router.post('/create/', function(req, res, next) {
+// GET /api/topics/ - returns all the topics
+router.get('/', function(req, res, next){
+  Topic.find(function(err, topics) {
+    if(err){ return res.json({error:"something went wrong"}); }
+    res.json(topics);
+  });
+});
 
-    var params = req.body;
+// POST /api/topics/ - creates a new topic from req.body (post )data
+router.post('/', function(req, res, next) {
 
-    console.log(params);
+  var postData = req.body;
 
-    if(params.topicName){
+  console.log(postData);
 
-        var topicObject = {
-            name: params.topicName
-        };
+  if(postData.name){
 
-        var newTopic = new Topic(topicObject);
-        newTopic.save(function(err, entry) {
+    var topicObject = {
+      name: postData.name
+    };
 
-            //handle saving error
-            if(err){ return res.json(err); }
+    var newTopic = new Topic(topicObject);
+    newTopic.save(function(err, topic) {
 
-            //return saved entry
-            res.json({"successs": entry});
-        });
+      //handle saving error
+      if(err){ return res.json(err); }
 
-    }else{
-        //if missing parameters returs error
-        res.status(500).send({ error: 'missing parameters' });
-    }
+      //return saved entry
+      res.json(topic);
+    });
+
+  }else{
+    //if missing parameters returns error
+    res.sendStatus(400);
+  }
 
 });
 
-// GET /api/topics/single/1234
-router.get('/single/:id', function(req, res, next) {
+// GET /api/topics/1234 - returns a single topic
+router.get('/:id', function(req, res, next) {
 
-    var params = req.params;
+  var params = req.params;
 
-    console.log(params);
+  console.log(params);
 
-    if(params.id){
-      //for example querying one
-      Topic.findById(params.id, function(err, entry) {
-        next(err, entry);
-      });
+  if(params.id){
+    var conditions = {_id: params.id};
+    var update = { $inc: { viewCount: 1 }};
+    var options = {new: true};
 
-      // for example querying one and updating, returning updated version
-      var conditions = {_id: params.id};
-      var update = { $inc: { viewCount: 1 }};
-      var options = {new: true};
+    var query = Topic.findOneAndUpdate(conditions, update, options);
 
-      var query = Topic.findOneAndUpdate(conditions, update, options);
-      query.select("-created -__v -_id");
+    query.exec(function(err, entry) {
+      if(err){ return res.json({error:"something went wrong"}); }
+      res.json(entry);
+    });
+  }else{
+    res.sendStatus(400);
+  }
 
-      query.exec(function(err, entry) {
-        if(err){ return res.json({"error":"something went wrong"}); }
-        res.json({"success": entry});
-      });
-    }else{
-        res.sendStatus(404);
-    }
+});
 
+// PUT /api/topics/:id
+router.put('/:id', function(req, res, next){
+  var id = req.params.id; // use the id from the route
+  var params = req.body;
+  if(params.name){
+    var conditions = {_id: id};
+    var update = {$set: {name: params.name}};
+    var options = {new: true};
+    var query = Topic.findOneAndUpdate(conditions, update, options);
+    query.exec(function(err, entry){
+      if(err){ return res.json({error: "something went wrong"}); }
+      res.json(entry);
+    });
+  } else {
+    res.status(500).send({error: 'missing parameters'});
+  }
+});
+
+// DELETE /api/topics/:id - mark topic as deleted (archived)
+router.delete('/:id', function(req, res, next){
+  var params = req.params;
+  if(params.id){
+    var conditions = {_id: params.id};
+    var update = {deleted: new Date()};
+    var options = {new: true}; // Return the new version of the object
+    var query = Topic.findOneAndUpdate(conditions, update, options);
+    query.exec(function(err, entry){
+      if(err){ return res.json({error: "something went wrong"}); }
+      res.json(entry);
+    });
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 module.exports = router;

@@ -1,0 +1,22 @@
+<md-dialog>
+    <md-content class="md-padding">
+        <form>
+            <div layout="column">
+                <md-input-container flex>
+                    <label>Topic name</label>
+                    <input md-autofocus style="width: 250px;" required ng-model="topic.name">
+                    <div ng-messages="topic.name.$error">
+                      <div ng-message="required">This is required!</div>
+                    </div>
+                </md-input-container>
+
+                 <md-dialog-actions flex>
+                    <span flex></span>
+                    <md-button ng-click="closeDialog()">Cancel</md-button>
+                    <input type="submit" class="md-button md-primary" ng-click="save(topic)" ng-if="action === 'add'" value='Add'></input>
+                    <input type="submit" class="md-button md-primary" ng-click="update(topic)" ng-if="action === 'edit'" value='Update'></input>
+                </md-dialog-actions>
+            </div>
+        </form>
+    </md-content>
+</md-dialog>

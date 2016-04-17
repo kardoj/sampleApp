@@ -1,0 +1,26 @@
+{
+  "name": "app",
+  "description": "Esimene app on parim app",
+  "main": "index.js",
+  "authors": [
+    "Kardo Jõeleht"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "app",
+    "esimene"
+  ],
+  "homepage": "https://github.com/kardoj/sampleApp",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.3",
+    "angular-route": "^1.5.3",
+    "angular-resource": "^1.5.3",
+    "angular-material": "^1.0.7"
+  }
+}

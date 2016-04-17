@@ -1,0 +1,42 @@
+<md-button ng-click="openDialog($event, 'add')" class="md-fab md-fab-bottom-right" aria-label="add new">
+    <md-icon>add</md-icon>
+    <md-tooltip md-direction="top" >
+        Add new topic
+    </md-tooltip>
+</md-button>
+
+<md-content>
+    <div layout="row" layout-align="center">
+        <div class="md-content" layout-padding flex-gt-sm="50" flex="100">
+            <h2 class="md-display-1">Topics</h2>
+            <div layout="row" layout-sm="column" layout-align="space-around">
+                <md-progress-circular ng-show="loading" md-diameter="80" md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <md-list ng-hide="loading">
+                <md-subheader class="md-no-sticky">Topics</md-subheader>
+                <md-list-item ng-repeat="topic in topics | filter: { deleted: '!' }" ng-click="navigateTo(topic._id)">
+                    <p> {{ topic.name }} </p>
+                    <md-menu class="md-secondary">
+                        <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                            <md-icon md-menu-origin >more_vert</md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button ng-click="openDialog($event, 'edit', topic)"><md-icon>edit</md-icon> edit</md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="archive(topic)"><md-icon>archive</md-icon> archive</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+
+                </md-list-item>
+                <br>
+                <md-subheader class="md-no-sticky">Archive</md-subheader>
+                <md-list-item ng-repeat="topic in topics | filter: { deleted: '!!' }">
+                    <p> {{ topic.name }} </p>
+                </md-list-item>
+            </md-list>
+        </div>
+    </div>
+</md-content>
