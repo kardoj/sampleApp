@@ -35,6 +35,16 @@
                 <md-subheader class="md-no-sticky">Archive</md-subheader>
                 <md-list-item ng-repeat="topic in topics | filter: { deleted: '!!' }">
                     <p> {{ topic.name }} </p>
+                    <md-menu class="md-secondary">
+                        <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                            <md-icon md-menu-origin >more_vert</md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button ng-click="unarchive(topic)"><md-icon>unarchive</md-icon> unarchive</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                 </md-list-item>
             </md-list>
         </div>

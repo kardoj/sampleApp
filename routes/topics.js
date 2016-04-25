@@ -71,7 +71,7 @@ router.put('/:id', function(req, res, next){
   var params = req.body;
   if(params.name){
     var conditions = {_id: id};
-    var update = {$set: {name: params.name}};
+    var update = {name: params.name};
     var options = {new: true};
     var query = Topic.findOneAndUpdate(conditions, update, options);
     query.exec(function(err, entry){

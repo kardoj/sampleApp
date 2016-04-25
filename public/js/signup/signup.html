@@ -1,0 +1,29 @@
+<div layout="row" layout-align="center">
+    <form flex-gt-sm="50" flex="100">
+        <h2>Signup</h2>
+        <md-content layout="column" layout-padding >
+            <md-input-container>
+                <label>Email</label>
+                <input md-autofocus style="width: 250px;" type="email" required  minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" ng-model="user.email">
+                <div ng-messages="user.email.$error">
+                    <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                        Your email must be between 10 and 100 characters long and look like an e-mail address.
+                    </div>
+                </div>
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input required type="password" name="password" minlength="8" ng-model="user.password">
+                <div ng-messages="user.password.$error">
+                    <div ng-message-exp="['required']">This is required.</div>
+                    <div ng-message-exp="['minlength']">Password should be atleast 8 symbols long</div>
+                </div>
+            </md-input-container>
+
+            <md-dialog-actions layout="row" layout-align="center" >
+                <input flex type="submit" class="md-raised md-button md-primary" ng-click="signup(user)" value='Signup'></input>
+            </md-dialog-actions>
+        </md-content>
+        <p>Already a user, <a href="/#/login">Login</a></p>
+    </form>
+</div>

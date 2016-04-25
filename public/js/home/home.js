@@ -46,8 +46,8 @@
       $scope.save = function(topic){
         var newTopic = new Topic(topic);
 
-        newTopic.$save()
-            .then(
+        newTopic.$save().
+            then(
                 function(data){
                     console.log(data);
                     $mdDialog.hide();

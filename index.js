@@ -11,9 +11,12 @@ app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
 // Routes are matched from top to bottom, 404 should be the bottom one!
 var topics = require('./routes/topics');
 app.use('/api/topics', topics);
+var users = require('./routes/users');
+app.use('/api/users', users);
 
 app.use(function(req, res, next) {
     var err = new Error('Resource not found');
