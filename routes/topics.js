@@ -3,8 +3,14 @@ var router = express.Router();
 // Takes our schema template, which is in the database
 var Topic = require('../models/topic').Topic;
 
+var config = require('../config');
+var expressJwt = require('express-jwt');
+var validateJwt = expressJwt({
+    secret: config.secret
+});
+
 // GET /api/topics/ - returns all the topics
-router.get('/', function(req, res, next){
+router.get('/', validateJwt, function(req, res, next){
   Topic.find(function(err, topics) {
     if(err){ return res.json({error:"something went wrong"}); }
     res.json(topics);
@@ -12,7 +18,7 @@ router.get('/', function(req, res, next){
 });
 
 // POST /api/topics/ - creates a new topic from req.body (post )data
-router.post('/', function(req, res, next) {
+router.post('/', validateJwt, function(req, res, next) {
 
   var postData = req.body;
 
@@ -42,7 +48,7 @@ router.post('/', function(req, res, next) {
 });
 
 // GET /api/topics/1234 - returns a single topic
-router.get('/:id', function(req, res, next) {
+router.get('/:id', validateJwt, function(req, res, next) {
 
   var params = req.params;
 
@@ -66,7 +72,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 // PUT /api/topics/:id
-router.put('/:id', function(req, res, next){
+router.put('/:id', validateJwt, function(req, res, next){
   var id = req.params.id; // use the id from the route
   var params = req.body;
   if(params.name){
@@ -84,7 +90,7 @@ router.put('/:id', function(req, res, next){
 });
 
 // DELETE /api/topics/:id - mark topic as deleted (archived)
-router.delete('/:id', function(req, res, next){
+router.delete('/:id', validateJwt, function(req, res, next){
   var params = req.params;
   if(params.id){
     var conditions = {_id: params.id};

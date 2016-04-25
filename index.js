@@ -25,6 +25,22 @@ app.use(function(req, res, next) {
 });
 
 app.use(function(err, req, res, next) {
+
+    // ADD if auth error, wrong or expired token
+    if (err.name === 'UnauthorizedError') {
+        res.status(403).json({message: "Not authorized"});
+        return;
+    }
+
+    console.error("["+(err.status || 500)+"] "+(new Date()).toString()+" "+req.url +' '+ err);
+    var message = err.status == 404 ? err.message : "Unknown error";
+    res.status(err.status || 500).json({
+        status: err.status || 500,
+        message: message //should by default hide in production
+    });
+});
+
+app.use(function(err, req, res, next) {
     console.error("["+(err.status || 500)+"] "+(new Date()).toString()+" "+req.url +' '+ err);
     var message = err.status == 404 ? err.message : "Unknown error";
     res.status(err.status || 500).json({
